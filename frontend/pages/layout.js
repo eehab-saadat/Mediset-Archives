@@ -9,7 +9,7 @@ import theme from '../components/CardComponent';
      <html lang="en">
        <body>
         <AppRouterCacheProvider options={{key : 'css'}}>
-            <ThemeProvider theme={}>
+            <ThemeProvider theme={'placeholder'}>
                 {props.children}
             </ThemeProvider>
         </AppRouterCacheProvider>
