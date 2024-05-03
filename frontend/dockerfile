@@ -1,23 +1,23 @@
 FROM node:alpine AS builder
 
-# Install pnpm globally (temporary stage)
+
 RUN apk add --no-cache libc6-compat && corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
 COPY package*.json ./
 
-# Install dependencies using pnpm
+
 RUN pnpm install 
 
 COPY . .
 
-# Build the project (assuming a build script in package.json)
+
 RUN pnpm run build
 
 EXPOSE 3000
 
-# Use pnpm to start the application
+
 CMD ["pnpm", "start"]
 
 
