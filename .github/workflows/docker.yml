@@ -18,14 +18,13 @@ jobs:
           password: biosphere123
 
       - name: Build Node.js image (frontend)
-        run: docker build -t username/nodejs-app ./frontend  
-        working-directory: ./frontend  
+        run: docker build ./frontend  -t username/nodejs-app 
 
       - name: Push Node.js image to Docker Hub (if applicable)
         run: docker push username/nodejs-app
 
       - name: Build Django image (replace with your Dockerfile path)
-        run: docker build -t username/django-app .  
+        run: docker build ./backend  -t username/django-app 
 
       - name: Push Django image to Docker Hub (if applicable)
         run: docker push username/django-app
