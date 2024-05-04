@@ -21,11 +21,11 @@ jobs:
         run: docker build ./frontend  -t username/nodejs-app 
 
       - name: Push Node.js image to Docker Hub (if applicable)
-        run: docker push username/nodejs-app
+        run: docker push ahmadkarimqureshi/nodejs-app
 
       - name: Build Django image (replace with your Dockerfile path)
         run: docker build ./backend  -t username/django-app 
 
       - name: Push Django image to Docker Hub (if applicable)
-        run: docker push username/django-app
+        run: docker push ahmadkarimqureshi/django-app
 
