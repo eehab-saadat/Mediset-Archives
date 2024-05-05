@@ -1,0 +1,44 @@
+/* SearchBar.css */
+.search-bar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+  }
+  
+  .search {
+    position: relative;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin-right: 16px;
+    width: 100%;
+  }
+  
+  .search:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+  
+  .search-icon-wrapper {
+    padding: 0 16px;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .styled-input-base {
+    color: inherit;
+    width: 100%;
+    padding: 8px 8px 8px 0;
+    padding-left: calc(1em + 64px);
+    transition: width 0.3s;
+  }
+  
+  .styled-input-base .MuiInputBase-input {
+    width: 12ch;
+  }
+  
+  .styled-input-base .MuiInputBase-input:focus {
+    width: 20ch;
+  }
