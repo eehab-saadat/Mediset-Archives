@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 import {
   TextField,
   Button,
@@ -8,34 +8,40 @@ import {
   Alert,
   IconButton,
   InputAdornment,
-} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/api/login', {
-        email,
-        password,
-      });
-      // Handle successful login (redirect, etc.)
-    } catch (error) {
-      setError(error.response.data.message || 'Login failed');
-    }
-  };
+  const handleSubmit = async (event) =>
+    {
+        event.preventDefault();
+        try {
+        const response = await axios.post("http://localhost:8000/api/login", {
+            email,
+            password,
+        });
+        // Handle successful login (redirect, etc.)
+        } catch (error) {
+            setError(error.response.data.message || "Login failed");
+        }
+    };
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" minHeight="100vh">
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
       <Grid item xs={12} sm={4}>
         <Typography variant="h2" gutterBottom>
           Sign in
@@ -46,7 +52,7 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Email or Phone"
+            label="Email or username"
             margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -55,7 +61,7 @@ const LoginPage = () => {
             fullWidth
             label="Password"
             margin="normal"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             InputProps={{
@@ -68,7 +74,13 @@ const LoginPage = () => {
               ),
             }}
           />
-          <Button variant="contained" type="submit" color="primary" fullWidth sx={{ mt: 3 }}>
+          <Button
+            variant="contained"
+            type="submit"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+          >
             Sign in
           </Button>
           {error && (

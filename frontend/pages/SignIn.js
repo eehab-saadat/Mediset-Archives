@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -31,9 +32,6 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-
-
-
 export default function SignIn() {
 
   const [email, setEmail] = useState('');
@@ -45,11 +43,11 @@ export default function SignIn() {
     event.preventDefault();
     try {
       // Sending the login request
-      const response = await axios.post('http://localhost:8000/api/login', {
-        email,
-        password,
-      });
-      console.log('email:', email, 'password:', password, 'response:', response.status);
+      // const response = await axios.post('http://localhost:8000/api/login', {
+      //   email,
+      //   password,
+      // });
+      console.log('email:', email, 'password:', password, 'response:');
       // TODO ; redirect to home/landing page
     } catch (error) {
       setError(error.response.data.message || 'Login failed');
