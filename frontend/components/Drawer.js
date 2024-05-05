@@ -103,7 +103,7 @@ export default function PersistentDrawerRight({ open, setOpen }) {
             </ListItem>
           ))}
         </List>
-        <Divider />
+        {/* <Divider /> */}
         {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text) => (
             <ListItem button key={text}>

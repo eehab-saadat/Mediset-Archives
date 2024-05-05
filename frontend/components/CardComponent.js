@@ -9,12 +9,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function CardComponent({name}) {
+export default function CardComponent({name, description, userName, votesCount, image}) {
     return(
     <Card sx={{ maxWidth: 345 }}>
     <CardMedia
-      sx={{ height: 140 }}
-      image="/static/images/cards/contemplative-reptile.jpg"
+      sx={{ height: 140}}
+      image={image}
       title="green iguana"
     />
     <CardContent>
@@ -22,13 +22,16 @@ export default function CardComponent({name}) {
         {name}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        Lizards are a widespread group of squamate reptiles, with over 6,000
-        species, ranging across all continents except Antarctica
+        {description}
       </Typography>
     </CardContent>
+
     <CardActions>
-      <Button size="small">Share</Button>
-      <Button size="small">Learn More</Button>
+      <Button size="small">Upvote</Button>
+      <Typography variant="body2" color="text.secondary">
+        {votesCount}
+      </Typography>
+      <Button size="small">Downvote</Button>
     </CardActions>
   </Card>
     );
