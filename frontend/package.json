@@ -13,6 +13,7 @@
     "@mui/material": "^5.15.16",
     "@mui/material-nextjs": "^5.15.11",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "axios": "^1.6.8",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

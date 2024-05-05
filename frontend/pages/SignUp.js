@@ -5,13 +5,12 @@ import homeStyles from '../styles/Home.module.css';
 import SignIn from './SignIn'
 import Card from '../components/CardComponent';
 import LoginIn from './LoginIn';
-export default function Home() {
+
+export default function SignUP() {
   return (
     <>
     <div className={homeStyles.container}>
-      <div className={homeStyles.CardContainer}>
-          <SignIn/>
-      </div>
+      Hello
     </div>
     </>
 
