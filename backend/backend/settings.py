@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'biosphere', 
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'pszsb1947',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
