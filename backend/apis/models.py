@@ -25,7 +25,9 @@ class Dataset(models.Model):
     CreatedAt = models.DateTimeField(auto_now_add=True)
     LastEditedBy = models.ForeignKey(User, related_name='editor', null=True, on_delete=models.SET_NULL)
     LastEditedAt = models.DateTimeField(auto_now=True)
+    VoteCount = models.IntegerField(default=0)
     DownloadCount = models.IntegerField(default=0)
+    CommentCount = models.IntegerField(default=0)
     IsPublic = models.BooleanField(default=False)
 
 class TagRequests(models.Model):
@@ -51,7 +53,10 @@ class DatasetVotes(models.Model):
     VoteID = models.AutoField(primary_key=True)
     DatasetID = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     VotedBy = models.ForeignKey(User, on_delete=models.CASCADE)
-    Vote = models.BooleanField(default=False)
+    Vote = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('DatasetID', 'VotedBy')
 
 class DatasetComments(models.Model):
     CommentID = models.AutoField(primary_key=True)
@@ -59,3 +64,6 @@ class DatasetComments(models.Model):
     CommentedBy = models.ForeignKey(User, on_delete=models.CASCADE)
     Comment = models.CharField(max_length=100, null=False)
     CommentedAt = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('DatasetID', 'CommentedBy')
