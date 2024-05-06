@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,6 +16,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useState } from 'react';
+import { IconButton } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useSession } from 'next-auth/react';
+import { signIn } from "next-auth/react";
 
 function Copyright(props) {
   return (
@@ -32,7 +39,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function LogIn() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,6 +59,7 @@ export default function SignIn() {
     } catch (error) {
       setError(error.response.data.message || 'Login failed');
     }
+    setPassword('');
   };
 
   const handlePasswordVisibility = () => {
@@ -94,10 +102,21 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type= {showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handlePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                ),
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -124,6 +143,22 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
+          <Button
+            onClick={() => signIn('google')
+              .then((response) => {
+                if (response.ok && response.session) {
+                  // Access the user's email from the session data
+                  const { user } = response.session;
+                  const userEmail = user.email;
+                  // Print the user's email to the console
+                  console.log('User signed in with email:', userEmail);
+                }
+              })
+
+            }
+            >
+            sigin with google
+          </Button>
         </Box>
         { error && (
             <Alert severity="error" sx={{ mt: 3 }}>
