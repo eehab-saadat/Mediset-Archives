@@ -19,8 +19,9 @@ import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useSession } from 'next-auth/react';
-import { signIn } from "next-auth/react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function Copyright(props) {
   return (
@@ -47,7 +48,7 @@ export default function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+
     try {
       // Sending the login request
       // const response = await axios.post('http://localhost:8000/api/login', {
@@ -142,8 +143,34 @@ export default function LogIn() {
                 </Link>
               </Grid>
             </Grid>
+<br/>
+            <GoogleOAuthProvider  clientId="886302518859-fkvi895pf6t8i8svsd8hi46fbfp89n53.apps.googleusercontent.com">
+                <GoogleLogin
+                    buttonText="Login with Google"
+                    onSuccess={response => {
+                      const tokenCredentials = response.credential;
+                      const decodedCredentials = jwtDecode(tokenCredentials);
+                      const googleEmail = decodedCredentials.email;
+                      // TODO: send the email to the backend FOR login
+                      // make a log in request to 8000/api/login
+                      try {
+                        // Sending the login request
+                        // const response = await axios.post('http://localhost:8000/api/login', {
+                        //   googleEmail,
+                        //   '', // send empty password
+                        // });
+                        console.log('email:', googleEmail, 'password:', password, 'response:');
+                        // TODO ; redirect to home/landing page
+                      } catch (error) {
+                        setError('Google Login failed');
+                      }
+                  }}
+                    onFailure={() => console.log("error")}
+                    cookiePolicy={"single_host_origin"}
+                />
+          </GoogleOAuthProvider>
           </Box>
-          <Button
+          {/* [<Button
             onClick={() => signIn('google')
               .then((response) => {
                 if (response.ok && response.session) {
@@ -158,7 +185,7 @@ export default function LogIn() {
             }
             >
             sigin with google
-          </Button>
+          </Button>] */}
         </Box>
         { error && (
             <Alert severity="error" sx={{ mt: 3 }}>
