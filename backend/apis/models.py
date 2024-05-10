@@ -1,14 +1,25 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.hashers import make_password, check_password
 
-class User(models.Model):
+class User(AbstractBaseUser):
     UserID = models.AutoField(primary_key=True)
     FName = models.CharField(max_length=10, null=False)
     LName = models.CharField(max_length=10, null=True)
     Username = models.CharField(max_length=30, null=False, unique=True)
-    Password = models.BinaryField(max_length=60, null=False)
+    Password = models.CharField(max_length=128, null=False, default=make_password('defaultpassword123'))  # Changed to CharField
     Phone = models.CharField(max_length=15, null=True)
     Email = models.EmailField(max_length=30, unique=True)
     IsAdmin = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'Username'
+    REQUIRED_FIELDS = ['FName', 'Email']
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.Password)
+
+    def set_password(self, raw_password):
+        self.Password = make_password(raw_password)
 
 class Tag(models.Model):
     TagID = models.AutoField(primary_key=True)
