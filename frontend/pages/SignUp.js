@@ -14,6 +14,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -37,7 +40,6 @@ export default function SignUp() {
       //   phone,
       //   email,
       // });
-      
       // console.log("Response:", response.data);
       console.log("Signup successful");
       console.log("First Name:", firstName, "Last Name:", lastName, "Username:", username, "Password:", password, "Phone:", phone, "Email:", email);
@@ -155,6 +157,40 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          <GoogleOAuthProvider  clientId="886302518859-fkvi895pf6t8i8svsd8hi46fbfp89n53.apps.googleusercontent.com">
+                <GoogleLogin
+                    buttonText="Login with Google"
+                    onSuccess={response => {
+                      const tokenCredentials = response.credential;
+                      const decodedCredentials = jwtDecode(tokenCredentials);
+                      // TODO: send the email to the backend FOR signup or user creation
+                      const googleFname = decodedCredentials.given_name;
+                      const googleLname = decodedCredentials.family_name;
+                      const googlePicture = decodedCredentials.picture;
+                      const googleEmail = decodedCredentials.email;
+                      // remove the part after @ in the email to get username
+                      const googleUsername = decodedCredentials.email.split('@')[0];
+                      // make a log in request to 8000/api/login
+                      try {
+                        // Sending the signup request
+                        // const response = await axios.post('http://localhost:8000/api/login', {
+                        //   googleFname,
+                        //   googleLname,
+                        //   googleUsername,
+                        //   googleEmail,
+                        //   googlePicture,
+                        // });
+                        console.log(decodedCredentials);
+                        console.log('email:', googleEmail, 'password:', password, 'response:');
+                        // TODO ; redirect to sign in page here
+                      } catch (error) {
+                        setError('Google Login failed');
+                      }
+                  }}
+                    onFailure={() => console.log("error")}
+                    cookiePolicy={"single_host_origin"}
+                />
+          </GoogleOAuthProvider>
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/" variant="body2">
