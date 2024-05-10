@@ -58,7 +58,8 @@ export default function Home() {
       <SearchBar  />
       <div className={homeStyles.container}>
       <div className={homeStyles.CardContainer}>
-        <OwnedSharedDatasets datasets={datasets} />
+        {/* <OwnedSharedDatasets datasets={datasets} /> */}
+        <Dataset />
       </div>
       </div>
     </>
