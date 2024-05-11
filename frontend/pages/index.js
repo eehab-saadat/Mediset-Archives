@@ -3,39 +3,6 @@ import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import Card from '../components/CardComponent';
-<<<<<<< HEAD
-import SearchBar from '../components/SearchBar';
-import Drawer from '../components/Drawer';
-import OwnedSharedDatasets from './OwnedSharedDatasets';
-import Dataset from './Dataset';
-import axios from 'axios';
-
-export default function Home() {
-  const [open, setOpen] = React.useState(false);
-  const [datasets, setDatasets] = React.useState([{}]);
-
-  React.useEffect(() => {
-   axios.get('http://localhost:8000/apis/datasets/')
-        .then (response => {
-          setDatasets(response.data);
-        })
-        .catch(error => { 
-          console.log(error);
-        });
-  }, []);
-
-  return (
-    <>
-      <SearchBar  />
-      <div className={homeStyles.container}>
-      <div className={homeStyles.CardContainer}>
-          <OwnedSharedDatasets  dataset={datasets} />
-
-      </div>
-      </div>
-    </>
-  );
-=======
 import SharedDatasets from '../styles/OwnedSharedDatasets.module.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -80,5 +47,4 @@ export default function OwnedSharedDatasets() {
             ))}
         </div>
     );
->>>>>>> a2c7be42b7323ad43099e48d47eb6608610420fa
 }

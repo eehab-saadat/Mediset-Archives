@@ -97,13 +97,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-<<<<<<< HEAD
-# SQLITE3 CONFIG: IF YOU DON'T HAVE POSTGRESQL INSTALLED, USE THIS CONFIGURATION
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-=======
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -112,7 +105,6 @@ DATABASES = {
         'PASSWORD': 'pszsb1947',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
->>>>>>> a2c7be42b7323ad43099e48d47eb6608610420fa
     }
 }
 
