@@ -26,6 +26,10 @@ export default function Dataset({ dataset, user, setDataset, onSave }) {
     });
   };
 
+  if (!dataset) {
+    return <Typography variant="h6">Dataset not available</Typography>;
+  }
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -59,7 +63,7 @@ export default function Dataset({ dataset, user, setDataset, onSave }) {
         ) : (
           <Typography variant="body1">{dataset.Description}</Typography>
         )}
-        {/* Add similar code for other fields of the dataset */}
+     
       </Grid>
     </Grid>
   );

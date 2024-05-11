@@ -7,32 +7,27 @@ import SharedDatasets from '../styles/OwnedSharedDatasets.module.css'
 import Link from 'next/link'
 
 export default function OwnedSharedDatasets({datasets}) {
-    const DatasetType = ['Owned Datasets', 'Shared Datasets'];
-    const DatasetDescription = ['The Netflix Titles dataset is a comprehensive compilation of movies and TV shows available on Netflix.','This dataset is scraped from IMDB\'s website. It may be used for regression, designing recommendation systems'
-    ];
-    const votesCount = 10;
-    const DatasetUser = ['John Doe, Jane Doe']; 
-    const imagePath = ['/imdb.jpg', '/netflix.jpg'];
+ 
     return (
         <>
         <div className={SharedDatasets.cards}>
             {datasets && datasets.map(dataset => (
-                <Link href={`/dataset/${dataset.DatasetID}`} key={dataset.DatasetID}>
+               
                    
                         <Card
                         key={dataset.DatasetID}
                         name={dataset.Name}
                         description={dataset.Description}
-                        userName={dataset.OwnerID} // Replace with actual user name if available
+                        userName={dataset.OwnerID} 
                         votesCount={dataset.VoteCount}
-                        image={dataset.StoragePath} // Replace with actual image path if available
+                        image={dataset.StoragePath} 
                         />
                    
-                </Link>
+             
             ))}
         </div>
         </>
-    );
+    );  
 }
 
 
