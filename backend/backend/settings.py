@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 
 # Application definition
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -58,8 +61,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ]
 }
-
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -96,13 +97,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
+<<<<<<< HEAD
 # SQLITE3 CONFIG: IF YOU DON'T HAVE POSTGRESQL INSTALLED, USE THIS CONFIGURATION
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+=======
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'biosphere', 
+        'USER': 'postgres',
+        'PASSWORD': 'pszsb1947',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+>>>>>>> a2c7be42b7323ad43099e48d47eb6608610420fa
     }
 }
+
+# SQLITE3 CONFIG: IF YOU DON'T HAVE POSTGRESQL INSTALLED, USE THIS CONFIGURATION
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -135,6 +155,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+USER_AUTH_MODEL = 'apis.User'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

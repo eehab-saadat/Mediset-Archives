@@ -56,3 +56,20 @@ class DatasetVotesViewSet(viewsets.ModelViewSet):
 class DatasetCommentsViewSet(viewsets.ModelViewSet):
     queryset = DatasetComments.objects.all()
     serializer_class = DatasetCommentsSerializer
+
+from django.contrib.auth import authenticate
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+
+class UserLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            return JsonResponse({'status': 'success', 'message': 'User authenticated'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid credentials'}, status=400)

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter # type: ignore
-from .views import UserViewSet, TagViewSet, DatasetViewSet, TagRequestsViewSet, DatasetCollaboratorViewSet, DatasetTagViewSet, DatasetVotesViewSet, DatasetCommentsViewSet
+from .views import *
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -14,4 +14,5 @@ router.register(r'datasetcomments', DatasetCommentsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/', UserLoginView.as_view(), name='user-login'),
 ]
