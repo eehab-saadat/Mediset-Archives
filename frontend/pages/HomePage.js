@@ -4,18 +4,15 @@ import CardContainer from "../components/CardContainer";
 export default function HomePage() {
     return (
         <div>
-            <div>
             <PrimarySearchAppBar />
-           </div>
-           <br>
-           </br>
-            <div>
-                <h1>Top Datasets</h1>
-                <CardContainer limit={5} ordered />
-            </div>
-            <div>
-                <h1>Recently Added Datasets</h1>
-                <CardContainer limit={5} />
+        <br/><br/>
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <h2>Top Datasets</h2>
+                <CardContainer limit={3} ordered style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}/>
+                <h2>Datasets for You</h2>
+                <CardContainer limit={3} contains={''} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}/>
+                <h2>Others</h2>
+                <CardContainer limit={10} contains={''} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}/>
             </div>
         </div>
     );
