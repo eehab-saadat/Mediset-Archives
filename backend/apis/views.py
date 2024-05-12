@@ -111,7 +111,7 @@ class DatasetCommentsViewSet(BaseViewSet):
     serializer_class = DatasetCommentsSerializer
 
     def get_queryset(self):
-        dataset = self.request.query_params.get('dataset', None)
+        dataset = self.request.query_params.get('DatasetID', None)
         if dataset is not None:
             queryset = DatasetComments.objects.filter(DatasetID=dataset)
             return queryset
