@@ -7,20 +7,26 @@ class User(AbstractBaseUser):
     FName = models.CharField(max_length=10, null=False)
     LName = models.CharField(max_length=10, null=True)
     Username = models.CharField(max_length=30, null=False, unique=True)
-    Password = models.CharField(max_length=128, null=False, default=make_password('defaultpassword123'))  # Changed to CharField
-    Phone = models.CharField(max_length=15, null=True)
+    Phone = models.CharField(max_length=15, null=True, default = "")
     Email = models.EmailField(max_length=30, unique=True)
     IsAdmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'Username'
     REQUIRED_FIELDS = ['FName', 'Email']
+    EMAIL_FIELD = 'Email'
 
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.Password)
-
-    def set_password(self, raw_password):
-        self.Password = make_password(raw_password)
-
+    def __str__(self):
+        return f"{self.FName} {self.LName} ({self.Username})"
+    
+    def get_username(self):
+        return self.Username
+    
+    def get_full_name(self):
+        return f"{self.FName} {self.LName}"
+    
+    def get_short_name(self):
+        return self.FName
+    
 class Tag(models.Model):
     TagID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=20, null=False, unique=True)
@@ -40,6 +46,9 @@ class Dataset(models.Model):
     DownloadCount = models.IntegerField(default=0)
     CommentCount = models.IntegerField(default=0)
     IsPublic = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"(ID #{self.DatasetID}) {self.Name} By {self.OwnerID.Username}"
 
 class TagRequests(models.Model):
     RequestID = models.AutoField(primary_key=True)

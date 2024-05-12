@@ -6,6 +6,7 @@ import Card from '../components/CardComponent';
 import SharedDatasets from '../styles/OwnedSharedDatasets.module.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function OwnedSharedDatasets() {
     const [datasets, setDatasets] = useState([]);
@@ -24,7 +25,7 @@ export default function OwnedSharedDatasets() {
                 // Add username to each dataset
                 const datasetsWithUsernames = datasets.map((dataset, index) => ({
                     ...dataset,
-                    userName: userResponses[index].data.username
+                    userName: userResponses[index].data.Username
                 }));
                 setDatasets(datasetsWithUsernames);
             })
@@ -36,14 +37,16 @@ export default function OwnedSharedDatasets() {
     return (
         <div className={SharedDatasets.cards}>
             {datasets.map((dataset, index) => (
+                <Link href={`/dataset/${dataset.DatasetID}`} key={dataset.DatasetID}>
                 <Card 
                     key={dataset.DatasetID}
                     name={dataset.Name} 
                     description={dataset.Description}
-                    userName={`User ${dataset.OwnerID}`}
+                    userName={`User ${dataset.userName}`}
                     votesCount={dataset.VoteCount}
                     image={'/netflix.jpg'}
                 />
+                </Link>
             ))}
         </div>
     );

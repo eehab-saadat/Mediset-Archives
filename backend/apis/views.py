@@ -4,6 +4,26 @@ from .serializer import * # type: ignore
 from django.core.paginator import Paginator
 from django.db import connection
 
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+
+class UserLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            print("\nOK MESSAGE: User successfully authenticated and logged in.", end="\n\n")
+            return JsonResponse({'status': 'success', 'message': 'User authenticated'}, status=200)
+        else:
+            print("\nERROR MESSAGE: Invalid credentials.", end="\n\n")
+            return JsonResponse({'status': 'error', 'message': 'Invalid credentials'}, status=400)
+
 class BaseViewSet(viewsets.ModelViewSet):
     def get_queryset(self, queryset=None):
         if queryset is None:
@@ -29,14 +49,20 @@ class DatasetViewSet(BaseViewSet):
 
     def get_queryset(self):
         ordered = self.request.query_params.get('ordered', False)
+        regex = self.request.query_params.get('contains', '')
         if ordered == 'True':
             limit = self.request.query_params.get('limit', None)
-            queryset = Dataset.objects.all().order_by('-VoteCount', '-DownloadCount', '-CommentCount')
+            queryset = Dataset.objects.filter(Name__contains=regex).order_by('-VoteCount', '-DownloadCount', '-CommentCount')
+            if limit is not None:
+                queryset = super().get_queryset(queryset=queryset)
+            return queryset
+        if regex != '':
+            queryset = Dataset.objects.filter(Name__contains=regex)
             if limit is not None:
                 queryset = super().get_queryset(queryset=queryset)
             return queryset
         return super().get_queryset()
-
+        
 class TagRequestsViewSet(viewsets.ModelViewSet):
     queryset = TagRequests.objects.all()
     serializer_class = TagRequestsSerializer
@@ -56,20 +82,3 @@ class DatasetVotesViewSet(viewsets.ModelViewSet):
 class DatasetCommentsViewSet(viewsets.ModelViewSet):
     queryset = DatasetComments.objects.all()
     serializer_class = DatasetCommentsSerializer
-
-from django.contrib.auth import authenticate
-from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-
-class UserLoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            return JsonResponse({'status': 'success', 'message': 'User authenticated'})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid credentials'}, status=400)

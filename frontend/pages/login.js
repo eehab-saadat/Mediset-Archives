@@ -22,6 +22,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Alert from '@mui/material/Alert';
 
 function Copyright(props) {
   return (
@@ -51,11 +52,11 @@ export default function LogIn() {
 
     try {
       // Sending the login request
-      // const response = await axios.post('http://localhost:8000/api/login', {
-      //   email,
-      //   password,
-      // });
-      console.log('email:', email, 'password:', password, 'response:');
+      const response = await axios.post('http://localhost:8000/apis/login', {
+        username: email,
+        password: password,
+      });
+      console.log('email:', email, 'password:', password, 'response:', response.data);
       // TODO ; redirect to home/landing page
     } catch (error) {
       setError(error.response.data.message || 'Login failed');

@@ -6,48 +6,11 @@ import Card from '../components/CardComponent';
 import SharedDatasets from '../styles/OwnedSharedDatasets.module.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
+import LogIn from './LogIn';
+import OwnedSharedDatasets from './OwnedSharedDatasets';
 
-export default function OwnedSharedDatasets() {
-    const [datasets, setDatasets] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/apis/datasets/?ordered=True&limit=5')
-            .then(response => {
-                const datasets = response.data;
-                // Fetch usernames for each dataset
-                const userPromises = datasets.map(dataset => 
-                    axios.get(`http://localhost:8000/apis/users/${dataset.OwnerID}`)
-                );
-                return Promise.all([datasets, ...userPromises]);
-            })
-            .then(([datasets, ...userResponses]) => {
-                // Add username to each dataset
-                const datasetsWithUsernames = datasets.map((dataset, index) => ({
-                    ...dataset,
-                    userName: userResponses[index].data.Username
-                }));
-                setDatasets(datasetsWithUsernames);
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
-    }, []);
-
+export default function Home() {
     return (
-        <div className={SharedDatasets.cards}>
-            {datasets.map((dataset, index) => (
-                <Link href={`/dataset/${dataset.DatasetID}`} key={dataset.DatasetID}>
-                <Card 
-                    key={dataset.DatasetID}
-                    name={dataset.Name} 
-                    description={dataset.Description}
-                    userName={`User ${dataset.userName}`}
-                    votesCount={dataset.VoteCount}
-                    image={'/netflix.jpg'}
-                />
-                </Link>
-            ))}
-        </div>
-    );
+        <OwnedSharedDatasets/>
+    );  
 }
