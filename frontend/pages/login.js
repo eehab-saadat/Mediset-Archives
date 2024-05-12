@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -23,6 +21,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import Alert from '@mui/material/Alert';
+import { redirect } from 'next/navigation'
 
 function Copyright(props) {
   return (
@@ -49,19 +48,17 @@ export default function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
-
+    event.preventDefault();
     try {
       // Sending the login request
-      const response = await axios.post('http://localhost:8000/apis/login', {
+      const response = await axios.post('http://localhost:8000/apis/login/', {
         username: email,
         password: password,
       });
-      console.log('email:', email, 'password:', password, 'response:', response.data);
-      // TODO ; redirect to home/landing page
     } catch (error) {
-      setError(error.response.data.message || 'Login failed');
+      setError(error.data.message || 'Login failed');
     }
-    setPassword('');
+    //setPassword('');
   };
 
   const handlePasswordVisibility = () => {

@@ -3,7 +3,6 @@ from .models import *
 from .serializer import * # type: ignore
 from django.core.paginator import Paginator
 from django.db import connection
-
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from rest_framework.views import APIView
@@ -15,7 +14,10 @@ class UserLoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
+        print(User.objects.all())
+        print(f"\nINFO MESSAGE: User {username} (Password: {password}) is trying to authenticate.", end="\n\n")
         user = authenticate(username=username, password=password)
+        print(f"{user}")
         if user is not None:
             login(request, user)
             print("\nOK MESSAGE: User successfully authenticated and logged in.", end="\n\n")

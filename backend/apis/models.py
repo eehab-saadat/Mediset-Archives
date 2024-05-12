@@ -26,6 +26,13 @@ class User(AbstractBaseUser):
     
     def get_short_name(self):
         return self.FName
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        print(raw_password)
+        return check_password(raw_password, self.password)
     
 class Tag(models.Model):
     TagID = models.AutoField(primary_key=True)

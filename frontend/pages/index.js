@@ -11,6 +11,6 @@ import OwnedSharedDatasets from './OwnedSharedDatasets';
 
 export default function Home() {
     return (
-        <OwnedSharedDatasets/>
+        <LogIn/>
     );  
 }
