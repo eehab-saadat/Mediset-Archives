@@ -72,6 +72,8 @@ export default function LogIn() {
         password: password,
       });
       if (response.status === 200) {
+        localStorage.setItem('username', email);
+        localStorage.setItem('password', password);
         router.push('/OwnedSharedDatasets');
       }
 

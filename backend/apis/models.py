@@ -92,5 +92,5 @@ class DatasetComments(models.Model):
     Comment = models.CharField(max_length=100, null=False)
     CommentedAt = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ('DatasetID', 'CommentedBy')
+    # class Meta:
+    #     unique_together = ('DatasetID', 'CommentedBy')
