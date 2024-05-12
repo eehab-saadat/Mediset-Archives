@@ -13,12 +13,13 @@ export default function OwnedSharedDatasets() {
     const [isOwner, setIsOwner] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/apis/isowner/?OwnerID=1')
-            .then(response => {
-                setIsOwner(response.data.response === 'true');
-            }).catch(error => {
-                console.error('There was an error!', error);
-            });
+        // HERE IS THE ISOWNER REQUEST, UNCOMMENT ALL TE COMMENTS IN THIS FILE TO RUN IT
+        // axios.get('http://localhost:8000/apis/isowner/?OwnerID=1')
+        //     .then(response => {
+        //         setIsOwner(response.data.response === 'true');
+        //     }).catch(error => {
+        //         console.error('There was an error!', error);
+        //     });
         axios.get('http://localhost:8000/apis/datasets/?ordered=True&limit=5')
             .then(response => {
                 const datasets = response.data;
@@ -41,12 +42,12 @@ export default function OwnedSharedDatasets() {
             });
     }, []);
 
-    if (isOwner === null) {
-        return <div>Loading...</div>;
-    }
+    // if (isOwner === null) {
+    //     return <div>Loading...</div>;
+    // }
 
     return (
-        isOwner ?
+        // isOwner ?
         <div className={SharedDatasets.cards}>
             {datasets.map((dataset, index) => (
                 <Link href={`/dataset/${dataset.DatasetID}`} key={dataset.DatasetID}>
@@ -60,7 +61,7 @@ export default function OwnedSharedDatasets() {
                 />
                 </Link>
             ))}
-        </div> :
-        <h1>403 Forbidden</h1>
+        </div> 
+        // : <h1>403 Forbidden</h1>
     );
 }
