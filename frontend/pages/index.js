@@ -9,11 +9,16 @@ import axios from 'axios';
 import LogIn from './LogIn';
 import OwnedSharedDatasets from './OwnedSharedDatasets';
 import Dataset from './Dataset';
+import Search from '@mui/icons-material/Search';
+import SearchBar from '../components/SearchBar';
 
 export default function Home() {
     return (
         // <LogIn/>
-        <Dataset />
+        <>
+            <SearchBar />
+            <Dataset />
+        </>
 
     );  
 }
