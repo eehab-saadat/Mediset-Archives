@@ -1,33 +1,22 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Dataset from '../Dataset'
+import axios from 'axios';
 
-export default function DatasetPage({ dataset, user }) {
+export default function DatasetPage({ dataset: initialDataset, user }) {
   const router = useRouter()
   const { id } = router.query
 
-  const [editableDataset, setEditableDataset] = useState(dataset)
+  const [dataset, setDataset] = useState(initialDataset)
 
-  const handleSave = async () => {
-    const res = await fetch(`http://localhost:8000/apis/datasets/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(editableDataset),
-    })
-
-    if (res.ok) {
-      // Handle successful save here
-    } else {
-      // Handle error here
-    }
+  const handleSave = () => {
+    // Update the dataset here
   }
 
   return (
     <Dataset
-      dataset={editableDataset}
-      setDataset={setEditableDataset}
+      dataset={dataset}
+      setDataset={setDataset}
       user={user}
       onSave={handleSave}
     />
@@ -36,16 +25,25 @@ export default function DatasetPage({ dataset, user }) {
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  const res = await fetch(`http://localhost:8000/apis/datasets/${id}`);
-  const dataset = await res.json();
+  try {
+    const res = await axios.get(`http://localhost:8000/apis/datasets/${id}`);
+    const dataset = res.data;
 
-  // Fetch the current user here
-  const user = null 
+    // Fetch the current user here
+    const user = null 
 
-  return {
-    props: {
-      dataset,
-      user,
-    },
-  };
+    return {
+      props: {
+        dataset,
+        user,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {
+        error: error.message,
+      },
+    };
+  }
 }
