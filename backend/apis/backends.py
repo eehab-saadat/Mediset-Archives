@@ -16,16 +16,18 @@ class CustomUserAuthenticationBackend(ModelBackend):
                 user = User.objects.get(Email=username)
                 print(f"Failed. Trying {user} to signin in via email...")
             except User.DoesNotExist:
-                pass
+                return None
             else:
+                if user is None: 
+                    return None
                 if user.password == password:
                     return user
             if user.password == password:
-                print(f"Checking {user} password ({password}:{user.check_password(password)})...")
+                print(f"Checking {user} password ({password})...")
                 return user
         else:
             if user.password == password:
-                print(f"Checking {user} password ({password}:{user.check_password(password)})...")
+                print(f"Checking {user} password ({password})...")
                 return user
             
         print(f"Failed to authenticate {username} (Password: {password})")

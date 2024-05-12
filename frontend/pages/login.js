@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -22,6 +24,7 @@ import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import Alert from '@mui/material/Alert';
 import { redirect } from 'next/navigation'
+import { useRouter } from 'next/router';
 
 function Copyright(props) {
   return (
@@ -36,12 +39,25 @@ function Copyright(props) {
   );
 }
 
+// Define an async function
+async function loginUser(googleEmail) {
+      // Sending the login request
+      try {
+      const response = await axios.post('http://localhost:8000/apis/oauth/', {
+          email: googleEmail,
+          password: 'oauth',
+      });
+    } catch (error) {
+      throw Error('Invalid credentials. Please try again.');
+    }
+}
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function LogIn() {
 
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -55,10 +71,19 @@ export default function LogIn() {
         username: email,
         password: password,
       });
+      if (response.status === 200) {
+        router.push('/OwnedSharedDatasets');
+      }
+
     } catch (error) {
-      setError(error.data.message || 'Login failed');
+      let errorMessage = 'Invalid credentials. Please try again.';
+      // if (error.response && error.response.data && error.response.data.detail) {
+      //   errorMessage = error.response.data.detail;
+      // } else if (error.message) {
+      //   errorMessage = error.message;
+      // } 
+      setError(errorMessage);
     }
-    //setPassword('');
   };
 
   const handlePasswordVisibility = () => {
@@ -89,7 +114,7 @@ export default function LogIn() {
               required
               fullWidth
               id="email"
-              label="Email Address or username"
+              label="Email Address / Username"
               name="email"
               autoComplete="email"
               autoFocus
@@ -149,16 +174,10 @@ export default function LogIn() {
                       const tokenCredentials = response.credential;
                       const decodedCredentials = jwtDecode(tokenCredentials);
                       const googleEmail = decodedCredentials.email;
-                      // TODO: send the email to the backend FOR login
-                      // make a log in request to 8000/api/login
+                      
                       try {
-                        // Sending the login request
-                        // const response = await axios.post('http://localhost:8000/api/login', {
-                        //   googleEmail,
-                        //   '', // send empty password
-                        // });
-                        console.log('email:', googleEmail, 'password:', password, 'response:');
-                        // TODO ; redirect to home/landing page
+                        loginUser(googleEmail);
+                        router.push('/OwnedSharedDatasets');
                       } catch (error) {
                         setError('Google Login failed');
                       }

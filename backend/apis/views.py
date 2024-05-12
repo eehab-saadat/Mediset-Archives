@@ -26,6 +26,31 @@ class UserLoginView(APIView):
             print("\nERROR MESSAGE: Invalid credentials.", end="\n\n")
             return JsonResponse({'status': 'error', 'message': 'Invalid credentials'}, status=400)
 
+class OAuthLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email').strip().lower()
+        password = request.data.get('password').strip().lower()
+        print(f"OAUTH REQUEST BY {email}")
+        try:
+            user = User.objects.get(Email=email)
+            print(f"\nINFO MESSAGE: User {user.Username} ({user.Email}) is trying to authenticate.")
+            if user is not None:
+                if password == 'oauth':
+                    password = user.password
+                    login(request, user)
+                    print("\nOK MESSAGE: User successfully authenticated and logged in.", end="\n\n")
+                    return JsonResponse({'status': 'success', 'message': 'User authenticated'}, status=200)
+                else:
+                    print("\nERROR MESSAGE: Invalid password.", end="\n\n")
+            else:
+                print("\nERROR MESSAGE: User not found.", end="\n\n")
+        except Exception as e:
+            print(f"ERROR MESSAGE: {e}")
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid credentials'}, status=400)
+
 class BaseViewSet(viewsets.ModelViewSet):
     def get_queryset(self, queryset=None):
         if queryset is None:
@@ -81,6 +106,30 @@ class DatasetVotesViewSet(viewsets.ModelViewSet):
     queryset = DatasetVotes.objects.all()
     serializer_class = DatasetVotesSerializer
 
-class DatasetCommentsViewSet(viewsets.ModelViewSet):
+class DatasetCommentsViewSet(BaseViewSet):
     queryset = DatasetComments.objects.all()
     serializer_class = DatasetCommentsSerializer
+
+    def get_queryset(self):
+        dataset = self.request.query_params.get('dataset', None)
+        if dataset is not None:
+            queryset = DatasetComments.objects.filter(DatasetID=dataset)
+            return queryset
+        return super().get_queryset()
+
+def OwnershipView(APIView):
+    def get(self, request):
+        owner_id = request.query_params.get('OwnerID')
+        user = request.user
+        if user.UserID == owner_id:
+            return JsonResponse({'response':'true'})
+        else:
+            return JsonResponse({'response':'false'})
+        
+def is_owner(request):
+    if request.user.is_authenticated:
+        owner_id = request.GET.get('OwnerID', '')
+        user = request.user
+        if user.UserID == owner_id:
+            return JsonResponse({'response':'true'})
+    return JsonResponse({'response':'false'})

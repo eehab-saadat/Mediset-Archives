@@ -15,4 +15,6 @@ router.register(r'datasetcomments', DatasetCommentsViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('login/', UserLoginView.as_view(), name='user-login'),
+    path('oauth/', OAuthLoginView.as_view(), name='oauth-login'),
+    path('isowner/', is_owner, name='is-owner')
 ]

@@ -10,8 +10,15 @@ import Link from 'next/link';
 
 export default function OwnedSharedDatasets() {
     const [datasets, setDatasets] = useState([]);
+    const [isOwner, setIsOwner] = useState(null);
 
     useEffect(() => {
+        axios.get('http://localhost:8000/apis/isowner/?OwnerID=1')
+            .then(response => {
+                setIsOwner(response.data.response === 'true');
+            }).catch(error => {
+                console.error('There was an error!', error);
+            });
         axios.get('http://localhost:8000/apis/datasets/?ordered=True&limit=5')
             .then(response => {
                 const datasets = response.data;
@@ -34,7 +41,12 @@ export default function OwnedSharedDatasets() {
             });
     }, []);
 
+    if (isOwner === null) {
+        return <div>Loading...</div>;
+    }
+
     return (
+        isOwner ?
         <div className={SharedDatasets.cards}>
             {datasets.map((dataset, index) => (
                 <Link href={`/dataset/${dataset.DatasetID}`} key={dataset.DatasetID}>
@@ -48,6 +60,7 @@ export default function OwnedSharedDatasets() {
                 />
                 </Link>
             ))}
-        </div>
+        </div> :
+        <h1>403 Forbidden</h1>
     );
 }
