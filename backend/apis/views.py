@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from .utils import get_user_object
 
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
@@ -66,6 +67,13 @@ class UserViewSet(BaseViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        if username is not None:
+            queryset = User.objects.filter(Username=username)
+            return queryset
+        return super().get_queryset()
+
 class TagViewSet(BaseViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
@@ -102,6 +110,13 @@ class DatasetTagViewSet(viewsets.ModelViewSet):
     queryset = DatasetTag.objects.all()
     serializer_class = DatasetTagSerializer
 
+    def get_queryset(self):
+        dataset = self.request.query_params.get('DatasetID', None)
+        if dataset is not None:
+            queryset = DatasetTag.objects.filter(DatasetID=dataset)
+            return queryset
+        return super().get_queryset()
+
 class DatasetVotesViewSet(viewsets.ModelViewSet):
     queryset = DatasetVotes.objects.all()
     serializer_class = DatasetVotesSerializer
@@ -127,9 +142,15 @@ def OwnershipView(APIView):
             return JsonResponse({'response':'false'})
         
 def is_owner(request):
-    if request.user.is_authenticated:
-        owner_id = request.GET.get('OwnerID', '')
-        user = request.user
-        if user.UserID == owner_id:
+    
+    owner_id = request.GET.get('ownerid', None)
+    username = request.GET.get('username', '')
+    if owner_id is None or username == '': return JsonResponse({'response':'false'})
+    u1 = get_user_object(username)
+    if u1 is not None:
+        if int(u1.UserID) == int(owner_id):
             return JsonResponse({'response':'true'})
-    return JsonResponse({'response':'false'})
+        else:
+            return JsonResponse({'response':'false'})
+    else:
+        return JsonResponse({'response':'false'})
