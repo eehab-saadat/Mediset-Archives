@@ -1,8 +1,9 @@
 import subprocess
 from time import time as current_time
-from colorama import Fore, Style
 
 subprocess.run(['pip3', 'install', 'colorama'], cwd='backend')
+
+from colorama import Fore, Style
 
 print(Fore.BLUE + "\nInstalling dependencies...", end='\n\n')
 
