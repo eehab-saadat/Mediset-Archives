@@ -8,9 +8,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LogIn from './LogIn';
 import OwnedSharedDatasets from './OwnedSharedDatasets';
+import Dataset from './Dataset';
 
 export default function Home() {
     return (
-        <LogIn/>
+        // <LogIn/>
+        <Dataset />
+
     );  
 }
