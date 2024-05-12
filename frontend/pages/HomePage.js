@@ -1,7 +1,7 @@
 import PrimarySearchAppBar from "../components/SearchBar";
 import CardContainer from "../components/CardContainer";
 
-export default function HomePage() {
+export default function HomePage({user}) {
     return (
         <div>
             <PrimarySearchAppBar />
