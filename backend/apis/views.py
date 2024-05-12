@@ -67,6 +67,13 @@ class UserViewSet(BaseViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        if username is not None:
+            queryset = User.objects.filter(Username=username)
+            return queryset
+        return super().get_queryset()
+
 class TagViewSet(BaseViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
