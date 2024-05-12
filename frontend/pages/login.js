@@ -12,13 +12,23 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useState } from 'react';
+import { IconButton } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import Alert from '@mui/material/Alert';
+import { redirect } from 'next/navigation'
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Mediset-Archives
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -30,14 +40,29 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
+export default function LogIn() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      // Sending the login request
+      const response = await axios.post('http://localhost:8000/apis/login/', {
+        username: email,
+        password: password,
+      });
+    } catch (error) {
+      setError(error.data.message || 'Login failed');
+    }
+    //setPassword('');
+  };
+
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -64,10 +89,11 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Address or username"
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -75,9 +101,21 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type= {showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handlePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                ),
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -98,13 +136,60 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/SignUp" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
+<br/>
+            <GoogleOAuthProvider  clientId="886302518859-fkvi895pf6t8i8svsd8hi46fbfp89n53.apps.googleusercontent.com">
+                <GoogleLogin
+                    buttonText="Login with Google"
+                    onSuccess={response => {
+                      const tokenCredentials = response.credential;
+                      const decodedCredentials = jwtDecode(tokenCredentials);
+                      const googleEmail = decodedCredentials.email;
+                      // TODO: send the email to the backend FOR login
+                      // make a log in request to 8000/api/login
+                      try {
+                        // Sending the login request
+                        // const response = await axios.post('http://localhost:8000/api/login', {
+                        //   googleEmail,
+                        //   '', // send empty password
+                        // });
+                        console.log('email:', googleEmail, 'password:', password, 'response:');
+                        // TODO ; redirect to home/landing page
+                      } catch (error) {
+                        setError('Google Login failed');
+                      }
+                  }}
+                    onFailure={() => console.log("error")}
+                    cookiePolicy={"single_host_origin"}
+                />
+          </GoogleOAuthProvider>
           </Box>
+          {/* [<Button
+            onClick={() => signIn('google')
+              .then((response) => {
+                if (response.ok && response.session) {
+                  // Access the user's email from the session data
+                  const { user } = response.session;
+                  const userEmail = user.email;
+                  // Print the user's email to the console
+                  console.log('User signed in with email:', userEmail);
+                }
+              })
+
+            }
+            >
+            sigin with google
+          </Button>] */}
         </Box>
+        { error && (
+            <Alert severity="error" sx={{ mt: 3 }}>
+              {error}
+            </Alert>
+          )}
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
