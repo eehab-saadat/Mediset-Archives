@@ -14,8 +14,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function SignUp() {
+  const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -29,19 +31,19 @@ export default function SignUp() {
     event.preventDefault();
     try {
       // Sending the signup request
-      // const response = await axios.post("http://localhost:8000/user", {
-      //   firstName,
-      //   lastName,
-      //   username,
-      //   password,
-      //   phone,
-      //   email,
-      // });
+      const response = await axios.post("http://localhost:8000/apis/users/", {
+        FName: firstName,
+        LName: lastName,
+        Username: username,
+        password: password,
+        Phone: phone,
+        Email: email,
+      });
+      if (response.status === 201) {
+        alert("Signup successful");
+        router.push("/");
+      }
       
-      // console.log("Response:", response.data);
-      console.log("Signup successful");
-      console.log("First Name:", firstName, "Last Name:", lastName, "Username:", username, "Password:", password, "Phone:", phone, "Email:", email);
-      // TODO: Redirect to home/landing page
     } catch (error) {
       setErrorr(error.response?.data?.message || "Signup failed");
       alert("Error: " + error.response?.data?.message || "Signup failed");
