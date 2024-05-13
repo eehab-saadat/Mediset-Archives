@@ -74,7 +74,7 @@ export default function LogIn() {
       if (response.status === 200) {
         localStorage.setItem('username', email);
         localStorage.setItem('password', password);
-        router.push('/OwnedSharedDatasets');
+        router.push('/HomePage');
       }
 
     } catch (error) {
