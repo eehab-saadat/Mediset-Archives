@@ -19,8 +19,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import MailIcon from '@mui/icons-material/Mail';
 import AddDatasetForm from './AddDatasetForm';
 import { Add } from '@mui/icons-material';
-
-
+import { useRouter } from 'next/router';
 
 
 const drawerWidth = 240;
@@ -70,9 +69,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerRight({ open, setOpen }) {
   const theme = useTheme();
-
+  const router = useRouter();
+  
   const handleClick = () => {
     setOpen(false);
+    router.push('/createDataset');
   }
   return (
     <Box sx={{ display: 'flex'}}>
