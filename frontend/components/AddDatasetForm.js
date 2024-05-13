@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Switch } from '@mui/material';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 export default function AddDatasetForm() {
+
+    const router = useRouter();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [isPublic, setIsPublic] = useState(false);
@@ -14,7 +17,7 @@ export default function AddDatasetForm() {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setSelectedFile(file ? file.name : null);
+        setSelectedFile(file.name);
     };
 
     const handleCreateDataset = (event) => {
@@ -26,14 +29,19 @@ export default function AddDatasetForm() {
             Description: description,
             IsPublic: isPublic,
             OwnerID: 1,
-            StoragePath: selectedFile ? `D:/DB/Biosphere/frontend/public/storage/${selectedFile.name}` : ''
+            StoragePath: `D:/DB/Biosphere/frontend/public/storage/${selectedFile}`
         };
-
+        console.log(mydataset.StoragePath);
+        console.log(mydataset.Description);
+        console.log(mydataset.Name);
+        console.log(mydataset.IsPublic);
+        console.log(mydataset.OwnerID);
         // Send a POST request to the /datasets/ endpoint using Axios
         axios.post('http://localhost:8000/apis/datasets/', mydataset)
             .then(response => {
                 console.log(response.data);
                 // Optionally, you can reset the form fields here
+                router.push('/HomePage');
             })
             .catch(error => {
                 console.error('Error:', error);
