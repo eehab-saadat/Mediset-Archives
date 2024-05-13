@@ -82,9 +82,10 @@ export default function HomePage() {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:8000/apis/datasetcomments/DatasetID=${dataset.DatasetID}`, {
+      const response = await axios.post(`http://localhost:8000/apis/datasetcomments/?DatasetID=${dataset.DatasetID}`, {
         Comment: newComment,
         CommentedBy: user.UserID,
+        DatasetID: dataset.DatasetID // corrected property name
       });
       setNewComment('');
       setComments([...comments, response.data]);
@@ -120,17 +121,17 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              style={{ padding: '20px', marginBottom: '20px', backgroundColor: '#87CEEB', borderRadius: '10px', border: '1px solid #e0e0e0' }}
+              style={{ padding: '20px', marginBottom: '20px', backgroundColor: '#ffffff', borderRadius: '10px', border: '0.5px solid white' }}
             >
               <a href="/storage/data.csv" download>
                   <MotionButton
                     variant="contained"
                     color="primary"
                     style={{ marginRight: '20px', backgroundColor: '#9292fc', color: 'white' }}
-                    whileHover={{ scale: 1.1, boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)' }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    Download Dataset  <small>.csv</small>
+                    Download   <small>.csv</small>
                   </MotionButton>
                </a>
               <MotionButton
@@ -152,14 +153,14 @@ export default function HomePage() {
                 alignItems: 'center',
                 padding: '20px',
                 marginBottom: '20px',
-                backgroundColor: '#87CEEB',
+                backgroundColor: 'white',
                 borderRadius: '10px',
-                border: '1px solid #e0e0e0'
+                // border: '1px solid #e0e0e0'
               }}
             >
               <MotionButton
                 variant="contained"
-                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginRight: '10px', backgroundColor: voted ? '#EA9AB2' : '#FFFFFF' }}
+                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginRight: '10px', backgroundColor: voted ? '#ffffff' : '#EA9AB2' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleUpvote}
@@ -176,7 +177,7 @@ export default function HomePage() {
               </MotionTypography>
               <MotionButton
                 variant="contained"
-                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginLeft: '10px', backgroundColor: voted ? '#EA9AB2' : '#FFFFFF' }}
+                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginLeft: '10px', backgroundColor: voted ? '#ffffff' : '#EA9AB2' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleDownvote}
@@ -188,7 +189,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              style={{ padding: '20px', marginBottom: '20px', backgroundColor: '#87CEEB', borderRadius: '10px', border: '1px solid #e0e0e0' }}
+              style={{ padding: '20px', marginBottom: '20px', backgroundColor: '#ffffff', borderRadius: '10px', border: '0.5px solid #grey' }}
             >
               <Typography variant="h6" gutterBottom>
                 Comments
@@ -197,7 +198,7 @@ export default function HomePage() {
                 {comments.map((comment) => (
                   <MotionPaper
                     key={comment.CommentID}
-                    style={{ padding: '10px', marginBottom: '10px', backgroundColor: 'white', borderRadius: '5px', border: '1px solid #e0e0e0' }}
+                    style={{ padding: '10px', marginBottom: '10px', backgroundColor: 'white', borderRadius: '5px', border: '1px solid #E0E0E0' }}
                     whileHover={{ scale: 1.05 }}
                   >
                     <Typography variant="body1">{comment.Comment} - {comment.CommentedBy}</Typography>
