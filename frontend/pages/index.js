@@ -11,13 +11,15 @@ import OwnedSharedDatasets from './OwnedSharedDatasets';
 import Dataset from './Dataset';
 import Search from '@mui/icons-material/Search';
 import SearchBar from '../components/SearchBar';
+import AddDatasetForm from '../components/AddDatasetForm';
 
 export default function Home() {
     return (
         // <LogIn/>
         <>
             <SearchBar />
-            <Dataset />
+            {/* <Dataset /> */}
+            <AddDatasetForm />
         </>
 
     );  

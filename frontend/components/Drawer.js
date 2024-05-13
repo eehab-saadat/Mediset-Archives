@@ -17,6 +17,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import MailIcon from '@mui/icons-material/Mail';
+import AddDataset from './AddDatasetForm';
+
 
 
 
@@ -68,6 +70,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function PersistentDrawerRight({ open, setOpen }) {
   const theme = useTheme();
 
+  const handleClick = () => {
+    setOpen(false);
+    AddDataset();
+  }
   return (
     <Box sx={{ display: 'flex'}}>
       <Drawer
@@ -94,10 +100,11 @@ export default function PersistentDrawerRight({ open, setOpen }) {
         </DrawerHeader> */}
         {/* <Divider /> */}
         <List>
-          {['Home', 'Categories', 'Owned/Shared Datasets'].map((text) => (
+          {['Home', 'Categories', 'Owned/Shared Datasets', 'Add Dataset'
+          ].map((text) => (
             <ListItem button key={text}>
               <ListItemIcon>
-                <OpenInNewIcon />
+                <OpenInNewIcon onClick={handleClick} />
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
