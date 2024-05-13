@@ -15,12 +15,12 @@ import AddDatasetForm from '../components/AddDatasetForm';
 
 export default function Home() {
     return (
-        // <LogIn/>
-        <>
-            <SearchBar />
-            {/* <Dataset /> */}
-            <AddDatasetForm />
-        </>
+        <LogIn/>
+        // <>
+        //     <SearchBar />
+        //     {/* <Dataset /> */}
+        //     <AddDatasetForm />
+        // </>
 
     );  
 }
