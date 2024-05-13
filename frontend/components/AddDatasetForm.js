@@ -20,24 +20,29 @@ export default function AddDatasetForm() {
     const handleCreateDataset = (event) => {
         event.preventDefault(); // Prevent form submission
 
-        // Create the dataset object
-        let mydataset = {
-            Name: name,
-            Description: description,
-            IsPublic: isPublic,
-            OwnerID: 1,
-            StoragePath: selectedFile ? `D:/DB/Biosphere/frontend/public/storage/${selectedFile.name}` : ''
-        };
+        const username = localStorage.getItem("username")
+        const response = axios.get("http://localhost:8000/apis/users/?username="+username)
+        if (response===200) {
+        
+            // Create the dataset object
+            let mydataset = {
+                Name: name,
+                Description: description,
+                IsPublic: isPublic,
+                OwnerID: response.UserID,
+                StoragePath: selectedFile ? `D:/DB/Biosphere/frontend/public/storage/${selectedFile.name}` : ''
+            };
 
-        // Send a POST request to the /datasets/ endpoint using Axios
-        axios.post('http://localhost:8000/apis/datasets/', mydataset)
-            .then(response => {
-                console.log(response.data);
-                // Optionally, you can reset the form fields here
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            // Send a POST request to the /datasets/ endpoint using Axios
+            axios.post('http://localhost:8000/apis/datasets/', mydataset)
+                .then(response => {
+                    console.log(response.data);
+                    // Optionally, you can reset the form fields here
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
     };
 
     return (
