@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Dataset from '../Dataset'
+import Dataset from './Dataset'
 import axios from 'axios';
 
 export default function DatasetPage({ dataset: initialDataset, user }) {
