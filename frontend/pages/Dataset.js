@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Button, TextField, Paper, Grid } from '@mui/material';
+import { Container, Typography, Button, TextField, Paper, Grid, Box } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import TableView from '../components/TableView';
 
 const MotionButton = motion(Button);
 const MotionTypography = motion(Typography);
@@ -14,13 +15,18 @@ export default function HomePage() {
   const [dataset, setDataset] = useState(null);
   const [user, setUser] = useState(null);
   const [comments, setComments] = useState([]);
+  const [datasetTags, setDatasetTags] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const filepath = '/storage/data.csv';
+  const [voteCount, setVoteCount] = useState(0);
+  const [voted, setVoted] = useState(false);
 
   useEffect(() => {
     const fetchDataset = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/apis/datasets/1'); // Replace '1' with the actual ID you want to fetch
+        const response = await axios.get('http://localhost:8000/apis/datasets/1');
         setDataset(response.data);
+        setVoteCount(response.data.VoteCount);
       } catch (error) {
         console.error('Error fetching dataset:', error);
       }
@@ -28,10 +34,19 @@ export default function HomePage() {
 
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/apis/users/1'); // Replace '1' with the actual ID you want to fetch
+        const response = await axios.get('http://localhost:8000/apis/users/1');
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user:', error);
+      }
+    };
+
+    const fetchDatasetTags = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/apis/tags/1');
+        setDatasetTags(response.data);
+      } catch (error) {
+        console.error('Error fetching dataset tags:', error);
       }
     };
 
@@ -44,20 +59,35 @@ export default function HomePage() {
       }
     };
 
-    fetchDataset();
     fetchUser();
+    fetchDataset();
     fetchComments();
+    fetchDatasetTags();
   }, []);
+
+  const handleUpvote = () => {
+    if (!voted) {
+      setVoteCount(voteCount + 1);
+      setVoted(true);
+    }
+  };
+
+  const handleDownvote = () => {
+    if (!voted) {
+      setVoteCount(voteCount - 1);
+      setVoted(true);
+    }
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`http://localhost:8000/apis/datasetcomments/DatasetID=${dataset.DatasetID}`, {
         Comment: newComment,
-        CommentedBy: user.UserID, // Assuming user data is fetched and available
+        CommentedBy: user.UserID,
       });
-      setNewComment(''); // Clear the input field after successful submission
-      setComments([...comments, response.data]); // Add the new comment to the comments state
+      setNewComment('');
+      setComments([...comments, response.data]);
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -71,7 +101,6 @@ export default function HomePage() {
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '50px' }}
     >
       <Container maxWidth="lg" style={{ paddingLeft: '10%', paddingRight: '10%' }}>
-        {/* Top section with "Welcome" and description */}
         <MotionPaper
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,25 +114,25 @@ export default function HomePage() {
             {dataset ? dataset.Description : 'Loading...'}
           </Typography>
         </MotionPaper>
-        {/* Main section */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            {/* Download and edit buttons */}
             <MotionPaper
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               style={{ padding: '20px', marginBottom: '20px', backgroundColor: '#87CEEB', borderRadius: '10px', border: '1px solid #e0e0e0' }}
             >
-              <MotionButton
-                variant="contained"
-                color="primary"
-                style={{ marginRight: '20px', backgroundColor: '#9292fc', color: 'white' }}
-                whileHover={{ scale: 1.1, boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)' }}
-                whileTap={{ scale: 0.9 }}
-              >
-                Download covid_dataset.csv
-              </MotionButton>
+              <a href="/storage/data.csv" download>
+                  <MotionButton
+                    variant="contained"
+                    color="primary"
+                    style={{ marginRight: '20px', backgroundColor: '#9292fc', color: 'white' }}
+                    whileHover={{ scale: 1.1, boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)' }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    Download Dataset  <small>.csv</small>
+                  </MotionButton>
+               </a>
               <MotionButton
                 variant="contained"
                 color="primary"
@@ -114,7 +143,6 @@ export default function HomePage() {
                 Edit Dataset
               </MotionButton>
             </MotionPaper>
-            {/* Upvote/downvote section */}
             <MotionPaper
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -131,9 +159,10 @@ export default function HomePage() {
             >
               <MotionButton
                 variant="contained"
-                style={{ color: '#9292fc', marginRight: '10px', backgroundColor: '#EA9AB2' }}
+                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginRight: '10px', backgroundColor: voted ? '#EA9AB2' : '#FFFFFF' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={handleUpvote}
               >
                 <ThumbUpIcon />
               </MotionButton>
@@ -143,18 +172,18 @@ export default function HomePage() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                {dataset ? dataset.VoteCount : 'Loading...'}
+                {voteCount}
               </MotionTypography>
               <MotionButton
                 variant="contained"
-                style={{ color: '#9292fc', marginLeft: '10px', backgroundColor: '#EA9AB2' }}
+                style={{ color: voted ? '#9292fc' : '#FFFFFF', marginLeft: '10px', backgroundColor: voted ? '#EA9AB2' : '#FFFFFF' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={handleDownvote}
               >
                 <ThumbDownIcon />
               </MotionButton>
             </MotionPaper>
-            {/* Comments section */}
             <MotionPaper
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -199,9 +228,7 @@ export default function HomePage() {
                 </MotionButton>
               </form>
             </MotionPaper>
-            {/* Comments box */}
           </Grid>
-          {/* Metadata section on the right side */}
           <Grid item xs={12} md={4}>
             <MotionPaper
               initial={{ opacity: 0, x: 20 }}
@@ -213,10 +240,13 @@ export default function HomePage() {
               <Typography variant="body1" style={{ marginBottom: '10px' }}>Created By: {user ? `${user.FName} ${user.LName}` : 'Loading...'}</Typography>
               <Typography variant="body1" style={{ marginBottom: '10px' }}>Created At: {dataset ? new Date(dataset.CreatedAt).toLocaleString() : 'Loading...'}</Typography>
               <Typography variant="body1" style={{ marginBottom: '10px' }}>Download Count: {dataset ? dataset.DownloadCount : 'Loading...'}</Typography>
-              <Typography variant="body1" style={{ marginBottom: '10px' }}>Dataset Tags: {dataset ? dataset.Tags : 'Loading...'}</Typography>
+              <Typography variant="body1" style={{ marginBottom: '10px' }}>Dataset Tags: {datasetTags.Name}</Typography>
             </MotionPaper>
           </Grid>
         </Grid>
+        <Box>
+          <TableView filepath={filepath} />
+        </Box>
       </Container>
     </motion.div>
   );
