@@ -57,7 +57,7 @@ export default function PrimarySearchAppBar() {
   const [openDrawer, setOpenDrawer] = React.useState(false); 
 
   const handleDrawerToggle = () => {
-    setOpenDrawer(!openDrawer); 
+    setOpenDrawer(!openDrawer);
   };
 
   return (
@@ -71,7 +71,7 @@ export default function PrimarySearchAppBar() {
             edge="start"
             color="inherit"
             aria-label="menu"
-            onClick={handleDrawerToggle} 
+            onClick={handleDrawerToggle}
             sx={{ mr: 2 }}
           >
             <MenuIcon />

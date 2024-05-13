@@ -17,7 +17,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import MailIcon from '@mui/icons-material/Mail';
-import AddDataset from './AddDatasetForm';
+import AddDatasetForm from './AddDatasetForm';
+import { Add } from '@mui/icons-material';
 
 
 
@@ -72,7 +73,6 @@ export default function PersistentDrawerRight({ open, setOpen }) {
 
   const handleClick = () => {
     setOpen(false);
-    AddDataset();
   }
   return (
     <Box sx={{ display: 'flex'}}>
@@ -85,7 +85,6 @@ export default function PersistentDrawerRight({ open, setOpen }) {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             position:'inherit',
-            
           },
         }}
         variant="persistent"
